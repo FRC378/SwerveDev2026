@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.CmdDriveForceTurnAngle;
 import frc.robot.commands.CmdDriveWithGamepad;
 import frc.robot.commands.CmdPrintText;
 import frc.robot.subsystems.Drivetrain;
@@ -35,6 +37,12 @@ public class RobotContainer {
 
 
     //****************Smartdashboard Buttons**************
+
+    SmartDashboard.putData( "0", new CmdDriveForceTurnAngle(0.0));
+    SmartDashboard.putData( "90", new CmdDriveForceTurnAngle(90.0));
+    SmartDashboard.putData( "45", new CmdDriveForceTurnAngle(45.0));
+    
+
 
     configureBindings();
   }

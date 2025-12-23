@@ -14,9 +14,10 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     System.out.println("Drivetrain Init");
 
-    m_frontLeft = new SwerveModule( 32, 31, 0,0.0,  "FL");
+    m_frontLeft = new SwerveModule( 32, 31, 3,0.0,  "FL");
 
 
+    m_frontLeft.ResetTurnEncoder();
 
   }
 
@@ -29,14 +30,16 @@ public class Drivetrain extends SubsystemBase {
   public void drive(double xValue, double yValue, double rValue  )
   {
 
-    m_frontLeft.setDriveMotorPower(xValue);
-    m_frontLeft.setTurnMotorPower(rValue);
+    m_frontLeft.SetDriveMotorPower(xValue);
+    m_frontLeft.SetTurnMotorPower(rValue);
 
   }
 
 
 
-
+  public void ForceAllTurnAngle( double angle ) {
+    m_frontLeft.SetTurnAngle(angle);
+  }
 
 
 
