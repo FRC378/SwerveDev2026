@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.CmdDriveWithGamepad;
 import frc.robot.commands.CmdPrintText;
+import frc.robot.subsystems.Drivetrain;
 
 public class RobotContainer {
 
@@ -19,7 +21,9 @@ public class RobotContainer {
 
   //****************Subsystems*******************
   //Make public & static to access "globally"
-  public static PowerDistribution m_pdp = new PowerDistribution(2, PowerDistribution.ModuleType.kCTRE);
+  public static PowerDistribution m_pdp  = new PowerDistribution(2, PowerDistribution.ModuleType.kCTRE);
+  public static Drivetrain  m_drivetrain = new Drivetrain();
+
 
 
 
@@ -27,6 +31,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     //****************Default Commands**************
+    m_drivetrain.setDefaultCommand( new CmdDriveWithGamepad() );
 
 
     //****************Smartdashboard Buttons**************
