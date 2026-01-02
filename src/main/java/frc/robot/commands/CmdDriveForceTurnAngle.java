@@ -15,7 +15,7 @@ public class CmdDriveForceTurnAngle extends Command {
   public CmdDriveForceTurnAngle( double angle) {
     
     m_angle = angle;
-    addRequirements( RobotContainer.m_drivetrain);
+    //addRequirements( RobotContainer.m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
