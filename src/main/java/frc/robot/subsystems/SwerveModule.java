@@ -147,6 +147,12 @@ public class SwerveModule extends SubsystemBase {
     SmartDashboard.putNumber(m_moduleID + "-TurnEnc",   GetTurnEncoderPosition() ); 
     SmartDashboard.putNumber(m_moduleID + "-TurnAbs",   GetTurnEncoderAbsolutePosition() ); 
 
+    //Drive
+    SmartDashboard.putNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
+
+    
+    //Drive Motor Temperature
+    SmartDashboard.putNumber(m_moduleID + "-DrvTemp",   GetDriveTemp() ); 
 
   }
 
@@ -176,15 +182,10 @@ public class SwerveModule extends SubsystemBase {
     // Scale speed by cosine of angle error.
     desiredState.cosineScale(currTurnAngle);
 
-
     SetTurnAngle( desiredState.angle.getDegrees() );
     SetDriveVelocity( desiredState.speedMetersPerSecond );  //Velocity in FEET PER SECOND.
-
-
-    //SetDriveVelocity(  MPS2FPS(state.speed() ) ) ;  //Need to convert MetersPerSec back to FeetPerSec
-    //SetTurnAngle( state.angle.Degrees().value() );
-
   }
+
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         0.0, 

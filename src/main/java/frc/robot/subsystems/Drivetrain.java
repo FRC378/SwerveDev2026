@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -79,6 +80,9 @@ public class Drivetrain extends SubsystemBase {
     //m_frontRight.setDesiredState(swerveModuleStates[1]);
     //m_backLeft.setDesiredState(swerveModuleStates[2]);
     //m_backRight.setDesiredState(swerveModuleStates[3]);
+
+    double vel = Math.hypot(xSpeed, ySpeed);
+    SmartDashboard.putNumber("xyVelocity", vel);
 
   }
 
