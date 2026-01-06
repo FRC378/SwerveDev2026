@@ -188,7 +188,7 @@ public class SwerveModule extends SubsystemBase {
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        0.0, 
+        GetDriveEncoderPosition(), 
         new Rotation2d( Math.toRadians(GetTurnEncoderPosition()) )  );
   }
 

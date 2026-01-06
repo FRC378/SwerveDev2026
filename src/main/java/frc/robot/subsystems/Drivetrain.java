@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import pabeles.concurrency.ConcurrencyOps.Reset;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -47,8 +50,23 @@ public class Drivetrain extends SubsystemBase {
   private SwerveModule m_backLeft   =  new SwerveModule( Constants.BACKLEFT_DRIVE_CAN_ID,  Constants.BACKLEFT_TURN_CAN_ID,  Constants.BACKLEFT_ENCODER_ID,  Constants.BACKLEFT_ENCODER_OFFSET,   "BL");;
   private SwerveModule m_backRight  =  new SwerveModule( Constants.BACKRIGHT_DRIVE_CAN_ID, Constants.BACKRIGHT_TURN_CAN_ID, Constants.BACKRIGHT_ENCODER_ID, Constants.BACKRIGHT_ENCODER_OFFSET,  "BR");;
 
+
   //Pigenon2 Gyro
   private final Pigeon2 m_gyro = new Pigeon2( Constants.PIGEON_CAN_ID, "rio");
+
+
+  //Odometry
+  private final SwerveDriveOdometry m_odometry =
+      new SwerveDriveOdometry(
+          m_kinematics,
+          m_gyro.getRotation2d(),
+          new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+          });
+
 
 
   //Swerve Drive Debug (AvantageScope)
@@ -57,9 +75,10 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     System.out.println("Drivetrain Init");
 
-    //Align SparkMax encoders to absolute encoders
-    ResetTurnEncoders();
+    m_gyro.reset();    
 
+    ResetTurnEncoders();  //Aligns SparkMax turn encoders to absolute encoders
+    ResetDriveEncoders();
 
     //Publisher init
     publisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
@@ -70,9 +89,25 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
+    //Update Odometry
+    m_odometry.update(
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_backLeft.getPosition(),
+          m_backRight.getPosition()
+        });
+
+
     //Gyro
     SmartDashboard.putBoolean("GyroConnected", IsGyroConnected() );
     SmartDashboard.putNumber("GyroYaw",  GetGyroYaw() );
+
+    //Odometry
+    SmartDashboard.putNumber( "odoX", GetOdometryX() ); 
+    SmartDashboard.putNumber( "odoY", GetOdometryY() ); 
+    SmartDashboard.putNumber( "odoH", GetOdometryHeading() ); 
 
   }
 
@@ -162,5 +197,40 @@ public class Drivetrain extends SubsystemBase {
     m_gyro.setYaw( 0 );
     System.out.println("ZeroGyro");
   }
+
+
+  // --- Odometry ---
+  public void ResetOdometry()
+  {
+    System.out.println("ResetOdometry");
+
+    //Reset to (0,0,0)
+    m_odometry.resetPosition(
+        new Rotation2d(),
+        new SwerveModulePosition[] {
+          new SwerveModulePosition(),
+          new SwerveModulePosition(),
+          new SwerveModulePosition(),
+          new SwerveModulePosition()
+        },
+        new edu.wpi.first.math.geometry.Pose2d()
+    );
+
+  }
+  public double GetOdometryX()
+  {
+    return m_odometry.getPoseMeters().getX();
+  }
+  public double GetOdometryY()
+  {
+    return m_odometry.getPoseMeters().getY();
+  }
+  public double GetOdometryHeading()
+  {
+    return m_odometry.getPoseMeters().getRotation().getDegrees();    //Outputs [-180 to +180]
+  }
+
+
+
 
 }
