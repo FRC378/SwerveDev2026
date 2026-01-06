@@ -18,6 +18,9 @@ public final class Constants {
 
 
   //** CAN IDs **
+  public static final int    PIGEON_CAN_ID    = 10;
+
+  
 
 
   //********** DRIVETRAIN CONSTANTS **********

@@ -19,10 +19,10 @@ public class CmdDriveClearAll extends Command {
 
     System.out.println("CmdDriveClearAll");
 
-    //ToDo:  Zero Gyro
     //ToDo:  Reset Odometry
     RobotContainer.m_drivetrain.ResetDriveEncoders();
     RobotContainer.m_drivetrain.ResetTurnEncoders();
+    RobotContainer.m_drivetrain.ZeroGyro();
   }
 
   @Override

@@ -14,6 +14,9 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -44,6 +47,10 @@ public class Drivetrain extends SubsystemBase {
   private SwerveModule m_backLeft   =  new SwerveModule( Constants.BACKLEFT_DRIVE_CAN_ID,  Constants.BACKLEFT_TURN_CAN_ID,  Constants.BACKLEFT_ENCODER_ID,  Constants.BACKLEFT_ENCODER_OFFSET,   "BL");;
   private SwerveModule m_backRight  =  new SwerveModule( Constants.BACKRIGHT_DRIVE_CAN_ID, Constants.BACKRIGHT_TURN_CAN_ID, Constants.BACKRIGHT_ENCODER_ID, Constants.BACKRIGHT_ENCODER_OFFSET,  "BR");;
 
+  //Pigenon2 Gyro
+  private final Pigeon2 m_gyro = new Pigeon2( Constants.PIGEON_CAN_ID, "rio");
+
+
   //Swerve Drive Debug (AvantageScope)
   private final StructArrayPublisher<SwerveModuleState> publisher;
 
@@ -62,6 +69,11 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    //Gyro
+    SmartDashboard.putBoolean("GyroConnected", IsGyroConnected() );
+    SmartDashboard.putNumber("GyroYaw",  GetGyroYaw() );
+
   }
 
 
@@ -135,6 +147,20 @@ public class Drivetrain extends SubsystemBase {
     m_backRight.ResetTurnEncoder();
   }
 
-
+  // --- Gyro ---
+  // +CCW,  -CW
+  public boolean IsGyroConnected()
+  {
+    return m_gyro.isConnected();
+  }
+  public double GetGyroYaw()            //yaw: -inf to +inf
+  {
+    return m_gyro.getYaw().getValueAsDouble(); 
+  }
+  public void ZeroGyro()
+  {
+    m_gyro.setYaw( 0 );
+    System.out.println("ZeroGyro");
+  }
 
 }
