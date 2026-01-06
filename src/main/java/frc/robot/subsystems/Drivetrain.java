@@ -83,7 +83,7 @@ public class Drivetrain extends SubsystemBase {
     //Velocity control
     final double xSpeed = xValue * kMaxVelocity;
     final double ySpeed = yValue * kMaxVelocity;
-    final double rSpeed = rValue * Math.toRadians(kMaxRotation);
+    final double rSpeed = rValue * Math.toRadians(kMaxRotation) * 3.28; //wpilib units fudge factor
 
     final boolean fieldRelative = false;
 

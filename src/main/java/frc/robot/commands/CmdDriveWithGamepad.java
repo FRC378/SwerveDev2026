@@ -34,8 +34,8 @@ public class CmdDriveWithGamepad extends Command {
 
 
     //Define default Drive Power
-    double xyScaleValue  = 0.7;
-    double rScaleValue   = 0.7;  
+    double xyScaleValue  = 0.3;
+    double rScaleValue   = 0.5;  
 
     //Apply scaling
     double fwdrev    = leftY  * xyScaleValue; 
