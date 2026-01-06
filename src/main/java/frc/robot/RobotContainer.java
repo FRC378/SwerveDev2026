@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.CmdDriveClearAll;
 import frc.robot.commands.CmdDriveForcePark;
 import frc.robot.commands.CmdDriveForceTurnAngle;
 import frc.robot.commands.CmdDriveWithGamepad;
@@ -38,6 +39,8 @@ public class RobotContainer {
 
 
     //****************Smartdashboard Buttons**************
+
+    SmartDashboard.putData( "CmdDriveClearAll",  new CmdDriveClearAll());
 
     SmartDashboard.putData( "0",  new CmdDriveForceTurnAngle(0.0));
     SmartDashboard.putData( "90", new CmdDriveForceTurnAngle(90.0));

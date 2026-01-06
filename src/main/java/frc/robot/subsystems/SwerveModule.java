@@ -149,7 +149,7 @@ public class SwerveModule extends SubsystemBase {
 
     //Drive
     SmartDashboard.putNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
-
+    SmartDashboard.putNumber(m_moduleID + "-DrvEnc",    GetDriveEncoderPosition() ); 
     
     //Drive Motor Temperature
     SmartDashboard.putNumber(m_moduleID + "-DrvTemp",   GetDriveTemp() ); 

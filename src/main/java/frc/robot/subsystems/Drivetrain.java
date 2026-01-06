@@ -8,6 +8,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -36,14 +39,23 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics( m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   // Swerve Modules
-  private SwerveModule m_frontLeft =  new SwerveModule( Constants.FRONTLEFT_DRIVE_CAN_ID, Constants.FRONTLEFT_TURN_CAN_ID, Constants.FRONTLEFT_ENCODER_ID,Constants.FRONTLEFT_ENCODER_OFFSET,  "FL");;
+  private SwerveModule m_frontLeft  =  new SwerveModule( Constants.FRONTLEFT_DRIVE_CAN_ID, Constants.FRONTLEFT_TURN_CAN_ID, Constants.FRONTLEFT_ENCODER_ID, Constants.FRONTLEFT_ENCODER_OFFSET,  "FL");;
+  private SwerveModule m_frontRight =  new SwerveModule( Constants.FRONTRIGHT_DRIVE_CAN_ID,Constants.FRONTRIGHT_TURN_CAN_ID,Constants.FRONTRIGHT_ENCODER_ID,Constants.FRONTRIGHT_ENCODER_OFFSET, "FR");;
+  private SwerveModule m_backLeft   =  new SwerveModule( Constants.BACKLEFT_DRIVE_CAN_ID,  Constants.BACKLEFT_TURN_CAN_ID,  Constants.BACKLEFT_ENCODER_ID,  Constants.BACKLEFT_ENCODER_OFFSET,   "BL");;
+  private SwerveModule m_backRight  =  new SwerveModule( Constants.BACKRIGHT_DRIVE_CAN_ID, Constants.BACKRIGHT_TURN_CAN_ID, Constants.BACKRIGHT_ENCODER_ID, Constants.BACKRIGHT_ENCODER_OFFSET,  "BR");;
 
-
+  //Swerve Drive Debug (AvantageScope)
+  private final StructArrayPublisher<SwerveModuleState> publisher;
 
   public Drivetrain() {
     System.out.println("Drivetrain Init");
 
-    m_frontLeft.ResetTurnEncoder();
+    //Align SparkMax encoders to absolute encoders
+    ResetTurnEncoders();
+
+
+    //Publisher init
+    publisher = NetworkTableInstance.getDefault().getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
   }
 
@@ -77,12 +89,19 @@ public class Drivetrain extends SubsystemBase {
 
     //Set Desired States
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    //m_frontRight.setDesiredState(swerveModuleStates[1]);
-    //m_backLeft.setDesiredState(swerveModuleStates[2]);
-    //m_backRight.setDesiredState(swerveModuleStates[3]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_backLeft.setDesiredState(swerveModuleStates[2]);
+    m_backRight.setDesiredState(swerveModuleStates[3]);
 
     double vel = Math.hypot(xSpeed, ySpeed);
     SmartDashboard.putNumber("xyVelocity", vel);
+
+    publisher.set(new SwerveModuleState[] {
+      swerveModuleStates[0],
+      swerveModuleStates[1],
+      swerveModuleStates[2],
+      swerveModuleStates[3]
+    });
 
   }
 
@@ -91,6 +110,7 @@ public class Drivetrain extends SubsystemBase {
     Rotation2d rot = Rotation2d.fromDegrees(angle);
     m_kinematics.resetHeadings(rot,rot,rot,rot);
   }
+
   public void ForcePark()
   {
     m_kinematics.resetHeadings( Rotation2d.fromDegrees(-45),   //FL      
@@ -100,6 +120,21 @@ public class Drivetrain extends SubsystemBase {
                               );
   }
   
+
+  public void ResetDriveEncoders() {
+    m_frontLeft.ResetDriveEncoder();
+    m_frontRight.ResetDriveEncoder();
+    m_backLeft.ResetDriveEncoder();
+    m_backRight.ResetDriveEncoder();
+  }
+
+  public void ResetTurnEncoders() {
+    m_frontLeft.ResetTurnEncoder();
+    m_frontRight.ResetTurnEncoder();
+    m_backLeft.ResetTurnEncoder();
+    m_backRight.ResetTurnEncoder();
+  }
+
 
 
 }
