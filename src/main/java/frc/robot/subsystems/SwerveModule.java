@@ -45,8 +45,6 @@ public class SwerveModule extends SubsystemBase {
   // SparkMax reports back in rotations per minute,  12 inches per foot,  60 seconds in a minute
   //  velocity = DRIVE_ENCODER_FACTOR / ( ft_per_inch * seconds_per_minute )
   final private double DRIVE_VELOCITY_FACTOR = ( (double)( DRIVE_ENCODER_FACTOR / (60.0 * 12.0) ) );  // ft/sec
-  final private double DRIVE_VELOCITY_MAX    = ( (double)15.0); //ft/sec
-
 
 
 
@@ -96,7 +94,7 @@ public class SwerveModule extends SubsystemBase {
         .smartCurrentLimit(40)
         .idleMode(IdleMode.kBrake)
         .inverted(false)  
-        .closedLoopRampRate(0.3);
+        .closedLoopRampRate(0.1);
 
     driveMotorConfig.encoder
         .positionConversionFactor( DRIVE_ENCODER_FACTOR  )

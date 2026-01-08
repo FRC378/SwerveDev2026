@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.CmdDriveClearAll;
 import frc.robot.commands.CmdDriveForcePark;
 import frc.robot.commands.CmdDriveForceTurnAngle;
+import frc.robot.commands.CmdDriveTypeToggle;
 import frc.robot.commands.CmdDriveWithGamepad;
+import frc.robot.commands.CmdDriveZeroGyro;
 import frc.robot.commands.CmdPrintText;
 import frc.robot.subsystems.Drivetrain;
 
@@ -41,6 +43,8 @@ public class RobotContainer {
     //****************Smartdashboard Buttons**************
 
     SmartDashboard.putData( "CmdDriveClearAll",  new CmdDriveClearAll());
+    SmartDashboard.putData( "DriveToggle",  new CmdDriveTypeToggle());
+
 
     SmartDashboard.putData( "0",  new CmdDriveForceTurnAngle(0.0));
     SmartDashboard.putData( "90", new CmdDriveForceTurnAngle(90.0));
@@ -54,14 +58,14 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Driver Buttons
-    m_driver.x().onTrue( new CmdPrintText("X Button ON")).onFalse(new CmdPrintText("X Button OFF") );
-    m_driver.y().onTrue( new CmdPrintText("Y Button ON"));
     m_driver.a().onTrue( new CmdPrintText("A Button ON"));
     m_driver.b().onTrue( new CmdPrintText("B Button ON"));
 
-    m_driver.start().onTrue( new CmdDriveForcePark() );
-    
+    m_driver.x().onTrue( new CmdDriveForcePark() );
+    m_driver.y().onTrue( new CmdDriveForceTurnAngle( 0.0) );
 
+    m_driver.start().onTrue( new CmdDriveZeroGyro() );  
+    
 
   }
 

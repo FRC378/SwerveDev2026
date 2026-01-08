@@ -16,8 +16,6 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import pabeles.concurrency.ConcurrencyOps.Reset;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -25,6 +23,13 @@ public class Drivetrain extends SubsystemBase {
 
   public static final double kMaxVelocity = 12.0;   // Feet per sec
   public static final double kMaxRotation = 270.0;  // degrees per second
+
+  public enum DriveType {
+    ROBOTCENTRIC,
+    FIELDCENTRIC
+  }
+
+  private DriveType m_driveType = DriveType.FIELDCENTRIC;
 
 
   // Coordinates of swerve modules for kinematic and odometry calculations
@@ -72,6 +77,8 @@ public class Drivetrain extends SubsystemBase {
   //Swerve Drive Debug (AvantageScope)
   private final StructArrayPublisher<SwerveModuleState> publisher;
 
+
+
   public Drivetrain() {
     System.out.println("Drivetrain Init");
 
@@ -109,10 +116,13 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber( "odoY", GetOdometryY() ); 
     SmartDashboard.putNumber( "odoH", GetOdometryHeading() ); 
 
+    //DriveType
+    SmartDashboard.putBoolean("DriveType", m_driveType==DriveType.FIELDCENTRIC );
+
   }
 
 
-  public void drive(double xValue, double yValue, double rValue  )
+  public void drive(double xValue, double yValue, double rValue, DriveType driveType ) 
   {
 
     //Velocity control
@@ -120,14 +130,13 @@ public class Drivetrain extends SubsystemBase {
     final double ySpeed = yValue * kMaxVelocity;
     final double rSpeed = rValue * Math.toRadians(kMaxRotation) * 3.28; //wpilib units fudge factor
 
-    final boolean fieldRelative = false;
 
     //Magic Voodoo call to calculate swerve math!
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             ChassisSpeeds.discretize(
-                fieldRelative
-                    ? ChassisSpeeds.fromFieldRelativeSpeeds( xSpeed, ySpeed, rSpeed, new Rotation2d(0.0) )
+               driveType == DriveType.FIELDCENTRIC
+                    ? ChassisSpeeds.fromFieldRelativeSpeeds( xSpeed, ySpeed, rSpeed, m_gyro.getRotation2d() )
                     : new ChassisSpeeds(xSpeed, ySpeed, rSpeed),
                 0.02));
 
@@ -230,6 +239,18 @@ public class Drivetrain extends SubsystemBase {
     return m_odometry.getPoseMeters().getRotation().getDegrees();    //Outputs [-180 to +180]
   }
 
+
+
+
+  //DriveType
+  public void SetDriveType( DriveType type )
+  {
+    m_driveType = type;
+  } 
+  public DriveType GetDriveType()
+  {
+    return m_driveType;
+  } 
 
 
 

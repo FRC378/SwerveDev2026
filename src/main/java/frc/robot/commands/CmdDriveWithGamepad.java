@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import edu.wpi.first.math.MathUtil;
 
 
 public class CmdDriveWithGamepad extends Command {
@@ -44,7 +43,7 @@ public class CmdDriveWithGamepad extends Command {
 
 
     //Call Drive!
-    RobotContainer.m_drivetrain.drive(fwdrev, rightleft, rotate);
+    RobotContainer.m_drivetrain.drive(fwdrev, rightleft, rotate, RobotContainer.m_drivetrain.GetDriveType() );
 
   }
 
