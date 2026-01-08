@@ -122,7 +122,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-  public void drive(double xValue, double yValue, double rValue, DriveType driveType ) 
+  public void Drive(double xValue, double yValue, double rValue, DriveType driveType ) 
   {
 
     //Velocity control

@@ -16,6 +16,7 @@ import frc.robot.commands.CmdDriveTypeToggle;
 import frc.robot.commands.CmdDriveWithGamepad;
 import frc.robot.commands.CmdDriveZeroGyro;
 import frc.robot.commands.CmdPrintText;
+import frc.robot.commands.GrpTest1;
 import frc.robot.subsystems.Drivetrain;
 
 public class RobotContainer {
@@ -49,6 +50,9 @@ public class RobotContainer {
     SmartDashboard.putData( "0",  new CmdDriveForceTurnAngle(0.0));
     SmartDashboard.putData( "90", new CmdDriveForceTurnAngle(90.0));
     SmartDashboard.putData( "45", new CmdDriveForceTurnAngle(45.0));
+
+    SmartDashboard.putData( "GrpTest1", new GrpTest1());
+
     
 
 

@@ -43,7 +43,7 @@ public class CmdDriveWithGamepad extends Command {
 
 
     //Call Drive!
-    RobotContainer.m_drivetrain.drive(fwdrev, rightleft, rotate, RobotContainer.m_drivetrain.GetDriveType() );
+    RobotContainer.m_drivetrain.Drive(fwdrev, rightleft, rotate, RobotContainer.m_drivetrain.GetDriveType() );
 
   }
 
