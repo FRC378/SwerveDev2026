@@ -18,6 +18,7 @@ import frc.robot.commands.CmdDriveZeroGyro;
 import frc.robot.commands.CmdPrintText;
 import frc.robot.commands.GrpTest1;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 
 public class RobotContainer {
 
@@ -30,6 +31,8 @@ public class RobotContainer {
   //Make public & static to access "globally"
   public static PowerDistribution m_pdp  = new PowerDistribution(2, PowerDistribution.ModuleType.kCTRE);
   public static Drivetrain  m_drivetrain = new Drivetrain();
+
+  public static Limelight   m_limelight  = new Limelight("limelight-vthree");
 
 
 
