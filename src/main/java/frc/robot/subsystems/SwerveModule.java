@@ -144,6 +144,8 @@ public class SwerveModule extends SubsystemBase {
     //Turn Encoder
     SmartDashboard.putNumber(m_moduleID + "-TurnEnc",   GetTurnEncoderPosition() ); 
     SmartDashboard.putNumber(m_moduleID + "-TurnAbs",   GetTurnEncoderAbsolutePosition() ); 
+    SmartDashboard.putNumber(m_moduleID + "-TurnRAW",   GetTurnEncoderRawPosition() ); 
+
 
     //Drive
     SmartDashboard.putNumber(m_moduleID + "-DrvVel",    GetDriveVelocity()  ); 
@@ -201,6 +203,11 @@ public class SwerveModule extends SubsystemBase {
     // Encoder.get returns range [0,1], multiply by 360 for degrees
   }
 
+  public double GetTurnEncoderRawPosition( ) {
+    // Offset Corrected position 
+    return BoundDegrees( (360.0 * m_analogEncoder.get())  );
+    // Encoder.get returns range [0,1], multiply by 360 for degrees
+  }
 
   //---  TURN MOTOR -----
   public void ResetTurnEncoder()
